@@ -1,9 +1,9 @@
 import { RequestHandler, Request, Response } from "express";
-import db from "../db";
+import todoService from "../services/todo.service";
 
 export const getTodos: RequestHandler = async (_: Request, res: Response) => {
   try {
-    const todos = await db.getAll();
+    const todos = await todoService.getAll();
     return res.json(todos);
   } catch (error) {
     console.log("Error getting todos");
@@ -16,7 +16,7 @@ export const postTodos: RequestHandler = async (
   res: Response,
 ) => {
   try {
-    await db.addTodo(req.body);
+    await todoService.add(req.body);
     return res.send("Created").status(201);
   } catch (error) {
     return res.send(error).status(503);
@@ -28,7 +28,7 @@ export const deleteTodo: RequestHandler = async (
   res: Response,
 ) => {
   try {
-    await db.deleteTodo(req.body.id);
+    await todoService.deleteId(req.body.id);
     return res.send("Deleted").status(204);
   } catch (error) {
     return res.send(error).status(503);
@@ -42,10 +42,10 @@ export const patchDone: RequestHandler = async (
   try {
     if (!req.body.id) throw new Error("No id provided");
     if (req.body.done) {
-      await db.editDone(req.body);
+      await todoService.editDone(req.body);
     }
     if (req.body.todo) {
-      await db.editTodo(req.body);
+      await todoService.editTodo(req.body);
     }
     return res.send("Changed").status(200);
   } catch (error) {

@@ -1,33 +1,18 @@
-import { Todo } from "./types";
-import Database, { Database as DB } from "better-sqlite3";
+import db from "../db/db";
+import { Todo } from "../types";
+import { Service } from "./service";
 
-class DatabaseFacade {
-  private db: DB;
-
-  constructor() {
-    this.db = new Database("./todos.db", { verbose: console.log });
-    this.init();
-  }
-
-  private init() {
-    const sql = `CREATE TABLE IF NOT EXISTS todos (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        todo TEXT NOT NULL,
-        done INTEGER NOT NULL
-    )`;
-    this.db.prepare(sql).run();
-  }
-
+class TodoService extends Service {
   async getAll() {
     return this.db.prepare("SELECT * FROM todos").all();
   }
 
-  async addTodo(todo: Todo) {
+  async add(todo: Todo) {
     const sql = `INSERT INTO todos(todo, done) VALUES (@task, @done)`;
     return this.db.prepare(sql).run(todo);
   }
 
-  async deleteTodo(id: number) {
+  async deleteId(id: number) {
     const sql = `DELETE FROM todos WHERE id == (?)`;
     return this.db.prepare(sql).run(id);
   }
@@ -43,4 +28,4 @@ class DatabaseFacade {
   }
 }
 
-export default new DatabaseFacade();
+export default new TodoService(db);
