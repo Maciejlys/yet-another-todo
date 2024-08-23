@@ -6,26 +6,27 @@
   "scripts": {
     "start": "node ./build/index.js",
     "start-clean": "npm run build && node ./build/index.js",
-    "build": "rm -rf ./build && tsc --build tsconfig.build.json",
+    "build": "rm -rf ./build && tsc --build",
     "test": "vitest run",
     "test:dev": "vitest"
   },
-  "keywords": [],
-  "author": "",
+  "author": "Maciejlys",
   "license": "ISC",
   "devDependencies": {
     "@types/body-parser": "^1.19.5",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/sinon": "^17.0.2",
+    "@types/better-sqlite3": "^7.6.11",
     "@types/supertest": "^2.0.16",
     "supertest": "^6.3.3",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "vitest": "^2.0.5"
   },
   "dependencies": {
+    "better-sqlite3": "^11.2.1",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
-    "express": "^4.18.2",
-    "vitest": "^2.0.5"
+    "express": "^4.18.2"
   }
 }

@@ -14,7 +14,7 @@ server.use(
 );
 
 server.use("/api", router);
-server.use((_, res, __) => {
+server.use((_, res) => {
   return res.sendStatus(404);
 });
 
