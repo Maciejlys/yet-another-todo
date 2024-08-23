@@ -41,11 +41,11 @@ export const patchDone: RequestHandler = async (
 ) => {
   try {
     if (!req.body.id) throw new Error("No id provided");
-    if (req.body.todo) {
-      await db.setDone(req.body);
+    if (req.body.done) {
+      await db.editDone(req.body);
     }
-    if (req.body.task) {
-      await db.editTask(req.body);
+    if (req.body.todo) {
+      await db.editTodo(req.body);
     }
     return res.send("Changed").status(200);
   } catch (error) {

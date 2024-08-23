@@ -32,13 +32,13 @@ class DatabaseFacade {
     return this.db.prepare(sql).run(id);
   }
 
-  async setDone(set: { done: number; id: number }) {
+  async editDone(set: { done: number; id: number }) {
     const sql = `UPDATE todos SET done = (@done) WHERE id == (@id)`;
     return this.db.prepare(sql).run(set);
   }
 
-  async editTask(set: { todo: string; id: number }) {
-    const sql = `UPDATE todos SET task = (@done) WHERE id == (@id)`;
+  async editTodo(set: { todo: string; id: number }) {
+    const sql = `UPDATE todos SET todo = (@todo) WHERE id == (@id)`;
     return this.db.prepare(sql).run(set);
   }
 }
