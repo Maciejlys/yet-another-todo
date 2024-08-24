@@ -1,4 +1,4 @@
 export type Todo = {
   task: string;
-  done: boolean;
+  done: number;
 };
