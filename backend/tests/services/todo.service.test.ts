@@ -1,9 +1,13 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import TodoService from "../../src/services/todo.service";
 import db from "../../src/db/db";
 
 describe("TodoService", () => {
   beforeEach(() => {
+    db.prepare = vi.fn().mockReturnValue({ run: vi.fn() });
+  });
+
+  afterEach(() => {
     vi.clearAllMocks();
   });
 
@@ -19,7 +23,6 @@ describe("TodoService", () => {
 
   it("should add a todo", async () => {
     const mockTodo = { task: "New Task", done: 0 };
-    db.prepare = vi.fn().mockReturnValue({ run: vi.fn() });
 
     await TodoService.add(mockTodo);
 
@@ -30,8 +33,6 @@ describe("TodoService", () => {
   });
 
   it("should delete a todo by id", async () => {
-    db.prepare = vi.fn().mockReturnValue({ run: vi.fn() });
-
     await TodoService.deleteId(1);
 
     expect(db.prepare).toHaveBeenCalledWith(
@@ -42,7 +43,6 @@ describe("TodoService", () => {
 
   it("should update todo status", async () => {
     const mockSet = { done: 1, id: 1 };
-    db.prepare = vi.fn().mockReturnValue({ run: vi.fn() });
 
     await TodoService.editDone(mockSet);
 
@@ -54,7 +54,6 @@ describe("TodoService", () => {
 
   it("should update todo text", async () => {
     const mockSet = { todo: "Updated Task", id: 1 };
-    db.prepare = vi.fn().mockReturnValue({ run: vi.fn() });
 
     await TodoService.editTodo(mockSet);
 
