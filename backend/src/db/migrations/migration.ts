@@ -7,7 +7,7 @@ const todos = `CREATE TABLE IF NOT EXISTS todos (
     )`;
 
 const details = `CREATE TABLE IF NOT EXISTS details (
-        todo_id INTEGER NOT NULL REFERENCES todos(id),
+        todo_id INTEGER NOT NULL REFERENCES todos(id) ON DELETE CASCADE,
         description TEXT NOT NULL
     )`;
 
