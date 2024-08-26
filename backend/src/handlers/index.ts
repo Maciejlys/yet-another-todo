@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { handleHealthCheck } from "./health.handler";
 import { deleteTodo, getTodos, patchTodo, postTodos } from "./todos.handler";
+import { getDetail, getDetails } from "./details.handler";
 import Routes from "./routes";
 
 const router = Router();
@@ -8,11 +9,13 @@ const router = Router();
 // get
 router.get(Routes.Health, handleHealthCheck);
 router.get(Routes.Todos, getTodos);
+router.get(Routes.Details, getDetails);
+router.get(Routes.Details + "/:id", getDetail);
 
 // post
 router.post(Routes.Todos, postTodos);
 
-// deleted
+// delete
 router.delete(Routes.Todos + "/:id", deleteTodo);
 
 // patch

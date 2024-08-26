@@ -22,12 +22,18 @@ describe("TodoService", () => {
   });
 
   it("should add a todo", async () => {
-    const mockTodo = { task: "New Task", done: 0 };
+    db.prepare = vi.fn().mockReturnValue({
+      run: vi.fn().mockReturnValue({ lastInsertedRowId: 1 }),
+    });
+    const mockTodo = { task: "New Task", done: 0, description: "test" };
 
     await TodoService.add(mockTodo);
 
     expect(db.prepare).toHaveBeenCalledWith(
       "INSERT INTO todos(task, done) VALUES (@task, @done)",
+    );
+    expect(db.prepare).toHaveBeenCalledWith(
+      "INSERT INTO details(todo_id, description) VALUES (@todo_id, @description)",
     );
     expect(db.prepare("").run).toHaveBeenCalledWith(mockTodo);
   });

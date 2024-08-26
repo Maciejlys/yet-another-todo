@@ -8,8 +8,20 @@ class TodoService extends Service {
   }
 
   async add(todo: Todo) {
-    const sql = `INSERT INTO todos(task, done) VALUES (@task, @done)`;
-    return this.db.prepare(sql).run(todo);
+    const td = `INSERT INTO todos(task, done) VALUES (@task, @done)`;
+    const dt = `INSERT INTO details(todo_id, description) VALUES (@todo_id, @description)`;
+
+    const tran = this.db.transaction(() => {
+      const insertTodo = this.db.prepare(td);
+      const insertDetails = this.db.prepare(dt);
+
+      const info = insertTodo.run(todo);
+      const todoId = info.lastInsertRowid;
+
+      insertDetails.run({ todo_id: todoId, description: todo.description });
+    });
+
+    return tran();
   }
 
   async deleteId(id: number) {
