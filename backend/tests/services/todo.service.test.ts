@@ -12,7 +12,7 @@ describe("TodoService", () => {
   });
 
   it("should get all todos", async () => {
-    const mockTodos = [{ id: 1, todo: "Test", done: 0 }];
+    const mockTodos = [{ id: 1, task: "Test", done: 0 }];
     db.prepare = vi.fn().mockReturnValue({ all: () => mockTodos });
 
     const todos = await TodoService.getAll();
@@ -27,7 +27,7 @@ describe("TodoService", () => {
     await TodoService.add(mockTodo);
 
     expect(db.prepare).toHaveBeenCalledWith(
-      "INSERT INTO todos(todo, done) VALUES (@task, @done)",
+      "INSERT INTO todos(task, done) VALUES (@task, @done)",
     );
     expect(db.prepare("").run).toHaveBeenCalledWith(mockTodo);
   });
@@ -42,24 +42,26 @@ describe("TodoService", () => {
   });
 
   it("should update todo status", async () => {
-    const mockSet = { done: 1, id: 1 };
+    const id = 1;
+    const mockSet = { done: 1 };
 
-    await TodoService.editDone(mockSet);
+    await TodoService.editDone(id, mockSet);
 
     expect(db.prepare).toHaveBeenCalledWith(
       "UPDATE todos SET done = (@done) WHERE id == (@id)",
     );
-    expect(db.prepare("").run).toHaveBeenCalledWith(mockSet);
+    expect(db.prepare("").run).toHaveBeenCalledWith({ id, done: mockSet.done });
   });
 
   it("should update todo text", async () => {
-    const mockSet = { todo: "Updated Task", id: 1 };
+    const id = 1;
+    const mockSet = { task: "Updated Task" };
 
-    await TodoService.editTodo(mockSet);
+    await TodoService.editTask(id, mockSet);
 
     expect(db.prepare).toHaveBeenCalledWith(
-      "UPDATE todos SET todo = (@todo) WHERE id == (@id)",
+      "UPDATE todos SET task = (@task) WHERE id == (@id)",
     );
-    expect(db.prepare("").run).toHaveBeenCalledWith(mockSet);
+    expect(db.prepare("").run).toHaveBeenCalledWith({ id, task: mockSet.task });
   });
 });
