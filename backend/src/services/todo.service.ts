@@ -8,7 +8,7 @@ class TodoService extends Service {
   }
 
   async add(todo: Todo) {
-    const sql = `INSERT INTO todos(todo, done) VALUES (@task, @done)`;
+    const sql = `INSERT INTO todos(task, done) VALUES (@task, @done)`;
     return this.db.prepare(sql).run(todo);
   }
 
@@ -17,14 +17,14 @@ class TodoService extends Service {
     return this.db.prepare(sql).run(id);
   }
 
-  async editDone(set: { done: number; id: number }) {
+  async editDone(id: number, todo: Partial<Todo>) {
     const sql = `UPDATE todos SET done = (@done) WHERE id == (@id)`;
-    return this.db.prepare(sql).run(set);
+    return this.db.prepare(sql).run({ id, done: todo.done });
   }
 
-  async editTodo(set: { todo: string; id: number }) {
-    const sql = `UPDATE todos SET todo = (@todo) WHERE id == (@id)`;
-    return this.db.prepare(sql).run(set);
+  async editTask(id: number, todo: Partial<Todo>) {
+    const sql = `UPDATE todos SET task = (@task) WHERE id == (@id)`;
+    return this.db.prepare(sql).run({ id, task: todo.task });
   }
 }
 
