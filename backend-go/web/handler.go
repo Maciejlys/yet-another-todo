@@ -20,6 +20,7 @@ func NewHandler(store todo.Store) *Handler {
 
 	h.Route("/todos", func(r chi.Router) {
 		r.Get("/", todos.List())
+		r.Post("/", todos.Create())
 	})
 
 	return h

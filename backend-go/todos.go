@@ -3,7 +3,7 @@ package todo
 type Todo struct {
 	ID   int    `db:"id"`
 	Task string `db:"task"`
-	Done bool   `db:"done"`
+	Done string `db:"done"`
 }
 
 type TodoStore interface {
