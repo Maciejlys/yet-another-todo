@@ -25,6 +25,8 @@ func NewHandler(store todo.Store) *Handler {
 		r.Get("/", todos.List())
 		r.Get("/{id}", todos.Get())
 		r.Post("/", todos.Create())
+		r.Delete("/{id}", todos.Delete())
+		r.Patch("/{id}", todos.Edit())
 	})
 
 	return h

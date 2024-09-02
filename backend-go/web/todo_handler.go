@@ -15,10 +15,6 @@ type TodoHandler struct {
 }
 
 func (h *TodoHandler) Get() http.HandlerFunc {
-	type data struct {
-		Todos []todo.Todo
-	}
-
 	return func(w http.ResponseWriter, r *http.Request) {
 		idStr := chi.URLParam(r, "id")
 		id, err := strconv.Atoi(idStr)
@@ -29,11 +25,6 @@ func (h *TodoHandler) Get() http.HandlerFunc {
 		}
 
 		tt, err := h.store.Todo(id)
-
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
 
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -77,5 +68,58 @@ func (h *TodoHandler) Create() http.HandlerFunc {
 		}
 
 		fmt.Fprint(w, "Created")
+	}
+}
+
+func (h *TodoHandler) Edit() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		idStr := chi.URLParam(r, "id")
+		id, err := strconv.Atoi(idStr)
+
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		form := CreateTodoForm{
+			Task: r.FormValue("task"),
+			Done: r.FormValue("done"),
+		}
+
+		if !form.Validate() {
+			http.Error(w, "Form is not valid", http.StatusBadRequest)
+			return
+		}
+
+		if err := h.store.UpdateTodo(&todo.Todo{
+			Task: form.Task,
+			Done: form.Done,
+		}, id); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		fmt.Fprint(w, "Updated")
+	}
+}
+
+func (h *TodoHandler) Delete() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		idStr := chi.URLParam(r, "id")
+		id, err := strconv.Atoi(idStr)
+
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		err = h.store.DeleteTodo(id)
+
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		fmt.Fprint(w, "Removed")
 	}
 }

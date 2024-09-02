@@ -36,19 +36,19 @@ func (s *TodoStore) CreateTodo(t *todo.Todo) error {
 	return nil
 }
 
-// func (s *ThreadStore) UpdateThread(t *goreddit.Thread) error {
-// 	if err := s.Get(t, `UPDATE threads SET title = $1, description = $2 WHERE id = $3 RETURNING *`,
-// 		t.Title,
-// 		t.Description,
-// 		t.ID); err != nil {
-// 		return fmt.Errorf("error updating thread: %w", err)
-// 	}
-// 	return nil
-// }
-//
-// func (s *ThreadStore) DeleteThread(id uuid.UUID) error {
-// 	if _, err := s.Exec(`DELETE FROM threads WHERE id = $1`, id); err != nil {
-// 		return fmt.Errorf("error deleting thread: %w", err)
-// 	}
-// 	return nil
-// }
+func (s *TodoStore) UpdateTodo(t *todo.Todo, id int) error {
+	if err := s.Get(t, `UPDATE todos SET task = $1, done = $2 WHERE id = $3 RETURNING *`,
+		t.Task,
+		t.Done,
+		id); err != nil {
+		return fmt.Errorf("error updating thread: %w", err)
+	}
+	return nil
+}
+
+func (s *TodoStore) DeleteTodo(id int) error {
+	if _, err := s.Exec(`DELETE FROM todos WHERE id = $1`, id); err != nil {
+		return fmt.Errorf("error deleting thread: %w", err)
+	}
+	return nil
+}

@@ -10,8 +10,8 @@ type TodoStore interface {
 	Todo(id int) (Todo, error)
 	Todos() ([]Todo, error)
 	CreateTodo(t *Todo) error
-	// UpdateTodo(t *Todo) error
-	// DeleteTodo(id int) error
+	UpdateTodo(t *Todo, id int) error
+	DeleteTodo(id int) error
 }
 
 type Store interface {
