@@ -1,9 +1,9 @@
 package todo
 
 type Todo struct {
-	ID   int    `db:"id"`
-	Task string `db:"task"`
-	Done string `db:"done"`
+	ID   int    `db:"id" json:"id"`
+	Task string `db:"task" json:"task"`
+	Done string `db:"done" json:"done"`
 }
 
 type TodoStore interface {

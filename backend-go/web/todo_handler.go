@@ -1,6 +1,7 @@
 package web
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -34,15 +35,16 @@ func (h *TodoHandler) Get() http.HandlerFunc {
 			return
 		}
 
-		fmt.Fprint(w, tt)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		json.NewEncoder(w).Encode(tt)
 	}
 }
 
 func (h *TodoHandler) List() http.HandlerFunc {
-	type data struct {
-		Todos []todo.Todo
-	}
-
 	return func(w http.ResponseWriter, r *http.Request) {
 		tt, err := h.store.Todos()
 		if err != nil {
@@ -50,7 +52,7 @@ func (h *TodoHandler) List() http.HandlerFunc {
 			return
 		}
 
-		fmt.Fprint(w, tt)
+		json.NewEncoder(w).Encode(tt)
 	}
 }
 
