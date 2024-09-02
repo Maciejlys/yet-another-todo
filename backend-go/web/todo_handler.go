@@ -3,12 +3,39 @@ package web
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 
-	todo "github.com/Maciejlys/yet-another-todo"
+	"github.com/Maciejlys/yet-another-todo"
+	"github.com/go-chi/chi/v5"
 )
 
 type TodoHandler struct {
 	store todo.Store
+}
+
+func (h *TodoHandler) Get() http.HandlerFunc {
+	type data struct {
+		Todos []todo.Todo
+	}
+
+	return func(w http.ResponseWriter, r *http.Request) {
+		idStr := chi.URLParam(r, "id")
+		id, err := strconv.Atoi(idStr)
+
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		tt, err := h.store.Todo(id)
+
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		fmt.Fprint(w, tt)
+	}
 }
 
 func (h *TodoHandler) List() http.HandlerFunc {
@@ -35,7 +62,7 @@ func (h *TodoHandler) Create() http.HandlerFunc {
 		}
 
 		if !form.Validate() {
-			http.Redirect(w, r, r.Referer(), http.StatusFound)
+			http.Error(w, "Form is not valid", http.StatusBadRequest)
 			return
 		}
 
