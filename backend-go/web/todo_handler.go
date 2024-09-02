@@ -31,6 +31,7 @@ func (h *TodoHandler) Get() http.HandlerFunc {
 			return
 		}
 
+		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(tt)
 	}
 }
@@ -43,6 +44,7 @@ func (h *TodoHandler) List() http.HandlerFunc {
 			return
 		}
 
+		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(tt)
 	}
 }
@@ -55,7 +57,7 @@ func (h *TodoHandler) Create() http.HandlerFunc {
 		}
 
 		if !form.Validate() {
-			http.Error(w, "Form is not valid", http.StatusBadRequest)
+			http.Error(w, form.Errors.String(), http.StatusBadRequest)
 			return
 		}
 
@@ -87,7 +89,7 @@ func (h *TodoHandler) Edit() http.HandlerFunc {
 		}
 
 		if !form.Validate() {
-			http.Error(w, "Form is not valid", http.StatusBadRequest)
+			http.Error(w, form.Errors.String(), http.StatusBadRequest)
 			return
 		}
 
