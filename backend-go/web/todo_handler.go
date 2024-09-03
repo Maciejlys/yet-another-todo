@@ -1,12 +1,12 @@
 package web
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
 
 	"github.com/Maciejlys/yet-another-todo"
+	"github.com/Maciejlys/yet-another-todo/utils"
 	"github.com/go-chi/chi/v5"
 )
 
@@ -31,8 +31,7 @@ func (h *TodoHandler) Get() http.HandlerFunc {
 			return
 		}
 
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(tt)
+		utils.WriteJSON(w, 200, tt)
 	}
 }
 
@@ -44,8 +43,7 @@ func (h *TodoHandler) List() http.HandlerFunc {
 			return
 		}
 
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(tt)
+		utils.WriteJSON(w, 200, tt)
 	}
 }
 
@@ -57,7 +55,7 @@ func (h *TodoHandler) Create() http.HandlerFunc {
 		}
 
 		if !form.Validate() {
-			http.Error(w, form.Errors.String(), http.StatusBadRequest)
+			utils.WriteError(w, 400, form.Errors)
 			return
 		}
 
@@ -89,7 +87,7 @@ func (h *TodoHandler) Edit() http.HandlerFunc {
 		}
 
 		if !form.Validate() {
-			http.Error(w, form.Errors.String(), http.StatusBadRequest)
+			utils.WriteError(w, 400, form.Errors)
 			return
 		}
 

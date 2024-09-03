@@ -16,13 +16,6 @@ type CreateTodoForm struct {
 	Errors FormErrors
 }
 
-func (e FormErrors) String() (result string) {
-	for k := range e {
-		result += e[k] + "\n"
-	}
-	return result
-}
-
 func (f *CreateTodoForm) Validate() bool {
 	f.Errors = FormErrors{}
 
