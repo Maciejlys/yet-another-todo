@@ -20,18 +20,18 @@ func (h *TodoHandler) Get() http.HandlerFunc {
 		id, err := strconv.Atoi(idStr)
 
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			utils.WriteError(w, err, http.StatusBadRequest)
 			return
 		}
 
 		tt, err := h.store.Todo(id)
 
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			utils.WriteError(w, err, http.StatusInternalServerError)
 			return
 		}
 
-		utils.WriteJSON(w, 200, tt)
+		utils.WriteJSON(w, tt, http.StatusOK)
 	}
 }
 
@@ -39,11 +39,11 @@ func (h *TodoHandler) List() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		tt, err := h.store.Todos()
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			utils.WriteError(w, err, http.StatusInternalServerError)
 			return
 		}
 
-		utils.WriteJSON(w, 200, tt)
+		utils.WriteJSON(w, tt, http.StatusOK)
 	}
 }
 
@@ -55,7 +55,7 @@ func (h *TodoHandler) Create() http.HandlerFunc {
 		}
 
 		if !form.Validate() {
-			utils.WriteError(w, 400, form.Errors)
+			utils.WriteErrors(w, form.Errors, http.StatusBadRequest)
 			return
 		}
 
@@ -63,11 +63,11 @@ func (h *TodoHandler) Create() http.HandlerFunc {
 			Task: form.Task,
 			Done: form.Done,
 		}); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			utils.WriteError(w, err, http.StatusInternalServerError)
 			return
 		}
 
-		fmt.Fprint(w, "Created")
+		utils.WriteMsg(w, "Created", http.StatusCreated)
 	}
 }
 
@@ -77,7 +77,7 @@ func (h *TodoHandler) Edit() http.HandlerFunc {
 		id, err := strconv.Atoi(idStr)
 
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			utils.WriteError(w, err, http.StatusInternalServerError)
 			return
 		}
 
@@ -87,7 +87,7 @@ func (h *TodoHandler) Edit() http.HandlerFunc {
 		}
 
 		if !form.Validate() {
-			utils.WriteError(w, 400, form.Errors)
+			utils.WriteErrors(w, form.Errors, http.StatusBadRequest)
 			return
 		}
 
@@ -95,11 +95,11 @@ func (h *TodoHandler) Edit() http.HandlerFunc {
 			Task: form.Task,
 			Done: form.Done,
 		}, id); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			utils.WriteError(w, err, http.StatusInternalServerError)
 			return
 		}
 
-		fmt.Fprint(w, "Updated")
+		utils.WriteMsg(w, "Updated", http.StatusOK)
 	}
 }
 
@@ -109,17 +109,17 @@ func (h *TodoHandler) Delete() http.HandlerFunc {
 		id, err := strconv.Atoi(idStr)
 
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			utils.WriteError(w, err, http.StatusInternalServerError)
 			return
 		}
 
 		err = h.store.DeleteTodo(id)
 
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			utils.WriteError(w, err, http.StatusInternalServerError)
 			return
 		}
 
-		fmt.Fprint(w, "Removed")
+		utils.WriteMsg(w, "Removed", http.StatusOK)
 	}
 }
