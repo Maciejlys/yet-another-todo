@@ -4,13 +4,13 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/Maciejlys/yet-another-todo"
+	"github.com/Maciejlys/yet-another-todo/models"
 	"github.com/Maciejlys/yet-another-todo/utils"
 	"github.com/go-chi/chi/v5"
 )
 
 type TodoHandler struct {
-	store todo.Store
+	store models.Store
 }
 
 func (h *TodoHandler) Get() http.HandlerFunc {
@@ -58,7 +58,7 @@ func (h *TodoHandler) Create() http.HandlerFunc {
 			return
 		}
 
-		if err := h.store.CreateTodo(&todo.Todo{
+		if err := h.store.CreateTodo(&models.Todo{
 			Task: form.Task,
 			Done: form.Done,
 		}); err != nil {
@@ -90,7 +90,7 @@ func (h *TodoHandler) Edit() http.HandlerFunc {
 			return
 		}
 
-		if err := h.store.UpdateTodo(&todo.Todo{
+		if err := h.store.UpdateTodo(&models.Todo{
 			Task: form.Task,
 			Done: form.Done,
 		}, id); err != nil {

@@ -1,17 +1,17 @@
 package web
 
 import (
-	"github.com/Maciejlys/yet-another-todo"
+	"github.com/Maciejlys/yet-another-todo/models"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 )
 
 type Handler struct {
 	*chi.Mux
-	store todo.Store
+	store models.Store
 }
 
-func NewHandler(store todo.Store) *Handler {
+func NewHandler(store models.Store) *Handler {
 	h := &Handler{
 		Mux:   chi.NewMux(),
 		store: store,

@@ -1,4 +1,4 @@
-package todo
+package models
 
 type Todo struct {
 	ID   int    `db:"id" json:"id"`
@@ -12,8 +12,4 @@ type TodoStore interface {
 	CreateTodo(t *Todo) error
 	UpdateTodo(t *Todo, id int) error
 	DeleteTodo(id int) error
-}
-
-type Store interface {
-	TodoStore
 }
