@@ -41,14 +41,14 @@ func (s *TodoStore) UpdateTodo(t *models.Todo, id int) error {
 		t.Task,
 		t.Done,
 		id); err != nil {
-		return fmt.Errorf("error updating thread: %w", err)
+		return fmt.Errorf("error updating todo: %w", err)
 	}
 	return nil
 }
 
 func (s *TodoStore) DeleteTodo(id int) error {
 	if _, err := s.Exec(`DELETE FROM todos WHERE id = $1`, id); err != nil {
-		return fmt.Errorf("error deleting thread: %w", err)
+		return fmt.Errorf("error deleting todo: %w", err)
 	}
 	return nil
 }
